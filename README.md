@@ -2,6 +2,12 @@
 
 This repository contains a **Python pipeline** for clustering human liver RNA-seq samples, identifying cluster-specific marker genes, and performing pathway enrichment analysis. The project includes dimensionality reduction (PCA, t-SNE), clustering (K-means, DBSCAN), differential expression, and gene set enrichment with visualization.
 
+The data was obtained from https://www.kaggle.com/datasets/lachmann12/human-liver-rnaseq-gene-expression-903-samples
+
+ARCHS4 is a web resource that makes the majority of published RNA-seq data from human and mouse available at the gene and transcript levels. For developing ARCHS4, available FASTQ files from RNA-seq experiments from the Gene Expression Omnibus (GEO) were aligned using a cloud-based infrastructure.
+
+This is a subset of the total gene expression contained within ARCHS4. Specifically, this data only contains samples matching human liver samples. The dataset contains 903 unique samples from 60 distinct experiments created by a diverse group of researchers. The data is provided as a simple tab-separated file with the columns representing the samples and the rows are 35238 genes encoded as HUGO gene symbols.
+
 ---
 
 ## Features
