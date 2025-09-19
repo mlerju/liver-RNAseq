@@ -1,48 +1,154 @@
-# Liver RNA-Seq Clustering and Pathway Analysis
+# Liver RNA-seq Clustering & Marker Gene Analysis
 
-This project explores publicly available RNA-seq data of **human liver samples** (903 samples × 35,238 genes)  
-to identify transcriptomic patterns and enriched biological pathways.
-
-### 🔬 Methods
-1. **Data Preprocessing**
-   - Log2 transformation and scaling
-   - PCA and t-SNE for dimensionality reduction
-
-2. **Unsupervised Clustering**
-   - K-means clustering (`n_clusters=3`, silhouette score = 0.57)
-   - DBSCAN for density-based structure detection (silhouette score = 0.54)
-
-3. **Cluster Characterization**
-   - Top 200 marker genes extracted per cluster
-   - Gene set enrichment using KEGG pathways (via `gseapy.enrichr`)
-
-4. **Visualization**
-   - PCA and t-SNE scatterplots
-   - Cluster-specific enrichment barplots
-   - Multi-cluster summary dotplot
-
-### 📊 Key Results
-- **Cluster 0**: Enriched for *complement and coagulation cascades*, *drug metabolism (CYP450)*.
-- **Cluster 1**: Enriched for *ribosome*, *glycolysis/gluconeogenesis*, *HIF-1 signaling*.
-- **Cluster 2**: Enriched for *ribosome*, *Salmonella/E. coli infection pathways*.
-
-These findings highlight distinct transcriptional programs in human liver, capturing immune, metabolic, and stress-response functions.
-
-### ⚙️ Technologies
-- **Python**: pandas, scikit-learn, matplotlib, seaborn
-- **Bioinformatics**: gseapy (Enrichr)
-- **Clustering**: K-means, DBSCAN
-- **Dimensionality Reduction**: PCA, t-SNE
-
-### 🚀 Future Directions
-- Add batch-effect correction and normalization
-- Compare clustering on TPM vs raw counts
-- Apply pathway network visualization (EnrichmentMap, Cytoscape)
+This repository contains a **Python pipeline** for clustering human liver RNA-seq samples, identifying cluster-specific marker genes, and performing pathway enrichment analysis. The project includes dimensionality reduction (PCA, t-SNE), clustering (K-means, DBSCAN), differential expression, and gene set enrichment with visualization.
 
 ---
 
-## 💡 Takeaways
-This project demonstrates:
-- Handling **high-dimensional transcriptomics data**
-- Applying **unsupervised learning** for biological discovery
-- Performing **pathway enrichment** to interpret clusters
+## Features
+
+- **Preprocessing & Normalization**
+  - Log-transformation of raw counts
+  - Filtering lowly expressed genes
+
+- **Dimensionality Reduction**
+  - PCA for variance exploration
+  - t-SNE for visualization
+
+- **Clustering**
+  - K-means
+  - DBSCAN
+  - Silhouette score evaluation
+
+- **Marker Gene Detection**
+  - Gene-wise t-test (cluster vs rest)
+  - Log2 fold-change and FDR-adjusted p-values
+  - Top N marker genes per cluster
+
+- **Gene Set Enrichment**
+  - Uses [gseapy](https://github.com/zqfang/GSEApy) `enrichr` for KEGG and GO pathways
+  - Filtering mitochondrial/unrecognized genes
+  - Barplots and dotplots of enriched pathways
+
+- **Visualization**
+  - PCA and t-SNE scatterplots
+  - Heatmaps of top marker genes
+  - Enrichment barplots and multi-cluster dotplots
+
+---
+
+## Installation
+
+1. Clone the repository:
+
+git clone https://github.com/yourusername/liver-rnaseq-clustering.git
+cd liver-rnaseq-clustering
+
+    Create a Python virtual environment and activate it:
+
+python -m venv .venv
+source .venv/bin/activate    # Linux/macOS
+.venv\Scripts\activate       # Windows
+
+    Install dependencies:
+
+pip install -r requirements.txt
+
+Dependencies include:
+
+    pandas
+
+    numpy
+
+    matplotlib
+
+    seaborn
+
+    scipy
+
+    scikit-learn
+
+    gseapy
+
+Usage
+
+    Prepare your RNA-seq dataset as a TSV file with genes as rows and samples as columns:
+
+gene    sample1    sample2    sample3 ...
+GENE1   100        50         200
+GENE2   0          10         5
+...
+
+    Edit main.py to point to your dataset:
+
+df = pd.read_csv("human_liver.tsv", sep="\t", index_col=0)
+
+    Run the analysis:
+
+python main.py
+
+The pipeline will:
+
+    Normalize the data
+
+    Run PCA and t-SNE
+
+    Perform K-means and DBSCAN clustering
+
+    Detect cluster-specific marker genes
+
+    Perform pathway enrichment
+
+    Plot heatmaps, barplots, and multi-cluster enrichment visualizations
+
+Project Structure
+
+liver-rnaseq-clustering/
+│
+├── main.py                 # Main script for analysis
+├── liver_rnaseq_analyzer.py  # Class-based modular pipeline
+├── human_liver.tsv         # Example RNA-seq dataset
+├── requirements.txt        # Python dependencies
+└── README.md
+
+Configuration
+
+You can modify the following parameters in main.py:
+
+    Clustering
+
+kmeans_clusters = 3
+dbscan_eps = 5
+dbscan_min_samples = 10
+
+Marker genes
+
+top_n_markers = 50
+
+Enrichment
+
+gene_sets = ['KEGG_2021_Human', 'GO_Biological_Process_2021']
+enrichment_cutoff = 0.05
+
+t-SNE
+
+    perplexity = 30
+    n_iter = 1000
+
+Visualization
+
+    PCA and t-SNE plots: clusters and sample distribution
+
+    Heatmaps: top marker genes per cluster
+
+    Barplots: top enriched pathways per cluster
+
+    Dotplots: multi-cluster enrichment comparison
+
+All plots are displayed interactively and can be saved by adding plt.savefig("filename.png") before plt.show().
+Notes
+
+    Mitochondrial (MT-) genes are filtered during enrichment to avoid bias.
+
+    Adjust top_n_markers and cutoff to control marker gene selection and enrichment sensitivity.
+
+    Ensure gseapy is installed and has internet access to query Enrichr.
